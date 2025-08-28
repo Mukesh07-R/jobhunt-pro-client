@@ -1,0 +1,19 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
+.input-field {
+  @apply border rounded px-3 py-2 w-full;
+}
+
+.btn-primary {
+  @apply bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600;
+}
+
+.card {
+  @apply bg-white p-6 rounded shadow-md;
+}
