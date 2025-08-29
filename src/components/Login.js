@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "../utils/api"; // ✅ correct
+import API from "../utils/api"; // ✅ central API URLs
 
 function Login({ setIsLoggedIn }) {
   const [email, setEmail] = useState("");
@@ -9,7 +9,7 @@ function Login({ setIsLoggedIn }) {
 
   const handleLogin = async () => {
     try {
-      const res = await fetch(`${API.login}`, {
+      const res = await fetch(API.login, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

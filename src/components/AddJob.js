@@ -16,42 +16,54 @@ function AddJob() {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    setToken(storedToken);
+    if (storedToken) setToken(storedToken);
   }, []);
 
   useEffect(() => {
     if (token) fetchJobs();
   }, [token]);
 
+  // ✅ Fetch jobs (GET)
   const fetchJobs = async () => {
     try {
-      const res = await API.get("/jobs", {
+      const res = await fetch(API.getJobs, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setJobs(res.data);
+      if (!res.ok) throw new Error("Failed to fetch jobs");
+      const data = await res.json();
+      setJobs(data);
     } catch (err) {
       console.error("Fetch jobs error:", err);
     }
   };
 
+  // ✅ Add or update job
   const handleForm = async () => {
     if (!token) return alert("Please login first");
 
     const job = { company, position, status, type, joblocation, notes };
 
     try {
+      let url = API.addJob;
+      let method = "POST";
+
       if (editId) {
-        await API.put(`/jobs/${editId}`, job, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        alert("Job updated!");
-      } else {
-        await API.post("/jobs", job, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        alert("Job added!");
+        url = `${API.getJobs}/${editId}`;
+        method = "PUT";
       }
 
+      const res = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(job),
+      });
+
+      if (!res.ok) throw new Error("Failed to save job");
+
+      alert(editId ? "Job updated!" : "Job added!");
       resetForm();
       fetchJobs();
     } catch (err) {
@@ -60,13 +72,18 @@ function AddJob() {
     }
   };
 
+  // ✅ Delete job
   const handleDelete = async (jobId) => {
     if (!window.confirm("Delete this job?")) return;
 
     try {
-      await API.delete(`/jobs/${jobId}`, {
+      const res = await fetch(`${API.getJobs}/${jobId}`, {
+        method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      if (!res.ok) throw new Error("Failed to delete job");
+
       setJobs((prev) => prev.filter((job) => job._id !== jobId));
     } catch (err) {
       console.error("Delete error:", err);
@@ -188,7 +205,9 @@ function AddJob() {
                   {job.position}
                 </h4>
                 <p className="text-sm text-gray-700">Company: {job.company}</p>
-                <p className="text-sm text-gray-700">Location: {job.joblocation}</p>
+                <p className="text-sm text-gray-700">
+                  Location: {job.joblocation}
+                </p>
                 <p className="text-sm">
                   Status:{" "}
                   <span
