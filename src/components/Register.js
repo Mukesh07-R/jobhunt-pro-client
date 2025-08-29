@@ -10,7 +10,7 @@ function Register({ setIsLoggedIn }) { // ✅ optional: update App state on regi
 
   const handleRegister = async () => {
     try {
-      const res = await fetch(API.register, { // ✅ use API.register
+      const res = await fetch(`${API.register}`, {  // ✅ use API.register
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
