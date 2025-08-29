@@ -21,6 +21,9 @@ function Login({ setIsLoggedIn }) {
         alert(data.message || "Login failed");
         return;
       }
+      console.log("Login success:", data);
+    localStorage.setItem("token", data.token);
+    navigate("/dashboard");
 
       if (data.token) {
         localStorage.setItem("token", data.token); // ✅ save token
