@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import LogoutButton from "./LogoutButton";
-import API from "../api"; // ✅ import centralized API
+import API from "../utils/api"; // ✅ correct
 
 function AddJob() {
   const [company, setCompany] = useState("");

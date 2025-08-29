@@ -1,7 +1,7 @@
 // src/pages/Register.js
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "../utils/api"; // ✅ import API object
+import API from "../utils/api"; // ✅ correct
 
 function Register({ setIsLoggedIn }) { // ✅ optional: update App state on register
   const [email, setEmail] = useState("");

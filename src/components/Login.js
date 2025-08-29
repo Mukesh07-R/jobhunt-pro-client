@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "../utils/api"; // ✅ central API file
+import API from "../utils/api"; // ✅ correct
 
 function Login({ setIsLoggedIn }) {
   const [email, setEmail] = useState("");
@@ -21,9 +21,6 @@ function Login({ setIsLoggedIn }) {
         alert(data.message || "Login failed");
         return;
       }
-      console.log("Login success:", data);
-    localStorage.setItem("token", data.token);
-    navigate("/dashboard");
 
       if (data.token) {
         localStorage.setItem("token", data.token); // ✅ save token
